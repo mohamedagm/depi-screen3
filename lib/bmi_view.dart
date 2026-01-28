@@ -1,4 +1,5 @@
 import 'package:depi_screen_3/gender_widget.dart';
+import 'package:depi_screen_3/result_view.dart';
 import 'package:flutter/material.dart';
 
 class BmiView extends StatefulWidget {
@@ -224,15 +225,36 @@ class _BmiViewState extends State<BmiView> {
                   double bmi = weight / ((height / 100) * (height / 100));
 
                   String result;
+                  String message;
+
                   if (bmi < 18.5) {
                     result = 'Underweight';
+                    message =
+                        'Your body weight is lower than normal. You need to gain weight! 💪';
                   } else if (bmi >= 18.5 && bmi < 25) {
                     result = 'Normal';
+                    message =
+                        'Your body weight is absolutely normal. Good job! 💪';
                   } else if (bmi >= 25 && bmi < 30) {
                     result = 'Overweight';
+                    message =
+                        'Your body weight is higher than normal. You need to lose weight! 💪';
                   } else {
                     result = 'Obese';
+                    message =
+                        'Your body weight is much higher than normal. Take care of yourself! 💪';
                   }
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ResultView(
+                        bmi: bmi,
+                        result: result,
+                        message: message,
+                      ),
+                    ),
+                  );
                 },
                 child: const Text(
                   'Calculate',
