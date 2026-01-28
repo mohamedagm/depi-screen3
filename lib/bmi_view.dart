@@ -1,8 +1,19 @@
 import 'package:depi_screen_3/gender_widget.dart';
 import 'package:flutter/material.dart';
 
-class BmiView extends StatelessWidget {
+class BmiView extends StatefulWidget {
   const BmiView({super.key});
+
+  @override
+  State<BmiView> createState() => _BmiViewState();
+}
+
+class _BmiViewState extends State<BmiView> {
+  bool isMaleChosen = false;
+  bool isFemaleChosen = true;
+  double height = 180;
+  int weight = 50;
+  int age = 24;
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +26,27 @@ class BmiView extends StatelessWidget {
             const SizedBox(height: 40),
 
             Row(
+              spacing: 10,
               children: [
-                GenderWidget(isChoosen: false, icon: Icons.male, text: 'male'),
-                const SizedBox(width: 16),
                 GenderWidget(
-                  isChoosen: true,
+                  onTap: () {
+                    setState(() {
+                      isMaleChosen = true;
+                      isFemaleChosen = false;
+                    });
+                  },
+                  isChoosen: isMaleChosen,
+                  icon: Icons.male,
+                  text: 'male',
+                ),
+                GenderWidget(
+                  onTap: () {
+                    setState(() {
+                      isMaleChosen = false;
+                      isFemaleChosen = true;
+                    });
+                  },
+                  isChoosen: isFemaleChosen,
                   icon: Icons.female,
                   text: 'female',
                 ),
@@ -46,7 +73,7 @@ class BmiView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '180',
+                        '${height.round()}',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 40,
@@ -61,16 +88,127 @@ class BmiView extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   Slider(
-                    value: 180,
+                    value: height,
                     min: 100,
                     max: 220,
                     activeColor: Color(0xFFE91E63),
                     inactiveColor: Colors.grey,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      setState(() {
+                        height = value;
+                      });
+                    },
                   ),
                 ],
               ),
             ),
+            SizedBox(height: 20),
+            Row(
+              spacing: 10,
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff1C1F32),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      children: [
+                        Text('weight', style: TextStyle(color: Colors.white)),
+                        Text(
+                          '$weight',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  weight--;
+                                });
+                              },
+                              child: Icon(
+                                Icons.remove_circle,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  weight++;
+                                });
+                              },
+                              child: Icon(
+                                Icons.add_circle,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff1C1F32),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      children: [
+                        Text('age', style: TextStyle(color: Colors.white)),
+                        Text(
+                          '$age',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  age--;
+                                });
+                              },
+                              child: Icon(
+                                Icons.remove_circle,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  age++;
+                                });
+                              },
+                              child: Icon(
+                                Icons.add_circle,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
 
             SizedBox(
               width: double.infinity,
@@ -82,7 +220,20 @@ class BmiView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  double bmi = weight / ((height / 100) * (height / 100));
+
+                  String result;
+                  if (bmi < 18.5) {
+                    result = 'Underweight';
+                  } else if (bmi >= 18.5 && bmi < 25) {
+                    result = 'Normal';
+                  } else if (bmi >= 25 && bmi < 30) {
+                    result = 'Overweight';
+                  } else {
+                    result = 'Obese';
+                  }
+                },
                 child: const Text(
                   'Calculate',
                   style: TextStyle(
